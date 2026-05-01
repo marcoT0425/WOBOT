@@ -1,5 +1,5 @@
 # WOBOT
-WOBOT is a very optimal Wordle solvers in the world. It can solve all 2315 puzzles with a limit of 5 guesses for all the puzzles in easy mode with an average of 3.421 guesses. The suggested starting word is SALET.
+WOBOT is one of the most optimal Wordle solvers in the world. It can solve all 2315 puzzles with a limit of 5 guesses for all the puzzles in easy mode with an average of 3.421 guesses. The suggested starting word is SALET.
 
 If you want to run this code, make sure you have already followed these rules shown here:
 
