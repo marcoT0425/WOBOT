@@ -60,6 +60,7 @@ There are four modes for the Wordle analysis, which are:
 | sault         | ~3.4579 | 8005               | Tree search | Easy | Std (Orig) | 6          |
 | arose         | ~3.4605 | 8011               | Tree search | Easy | Std (Orig) | 5          |
 | raise         | ~3.4618 | 8014               | Tree search | Easy | Std (Orig) | 5          |
+| gamer         | ~3.5478 | 8213               | Tree search | Easy | Std (Orig) | 5          |
 | zizit         | ~3.9560 | 9158               | Tree search | Easy | Std (Orig) | 6          |
 | salet         | ~3.5093 | 8124               | Tree search | Hard | Std (Orig) | 6          |
 | trope         | ~3.5504 | 8219               | Tree search | Hard | Std (Orig) | 6          |
