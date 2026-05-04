@@ -24,7 +24,7 @@ There are four modes for the Wordle analysis, which are:
 
 <img width="1049" height="845" alt="Screenshot 2026-05-04 at 4 51 49 PM" src="https://github.com/user-attachments/assets/fc80a309-fda0-458e-a181-32996cedd5bf" />
 
-## Results (NOT fully tested)
+## Results (NOT fully tested) (You may go to https://freshman.dev/wordle/leaderboard?latest=true)
 
 | Starting word | Average | Tree size obtained | Method      | Mode | WordLists  | Worst case |
 | ------------- | ------- | ------------------ | ----------- | ---- | ---------- | ---------- |
@@ -61,3 +61,7 @@ There are four modes for the Wordle analysis, which are:
 | arose         | ~3.4605 | 8011               | Tree search | Easy | Std (Orig) | 5          |
 | raise         | ~3.4618 | 8014               | Tree search | Easy | Std (Orig) | 5          |
 | zizit         | ~3.9560 | 9158               | Tree search | Easy | Std (Orig) | 6          |
+| salet         | ~3.5093 | 8124               | Tree search | Hard | Std (Orig) | 6          |
+| trope         | ~3.5504 | 8219               | Tree search | Hard | Std (Orig) | 6          |
+| clasp         | ~3.5728 | 8271               | Tree search | Hard | Std (Orig) | 6          |
+| crate         | ~3.4454 | 7976               | Tree search | Easy | Only Ans   | 6          |
