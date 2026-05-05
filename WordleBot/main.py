@@ -136,7 +136,7 @@ def get_entropy_score(word, pool):
         p = get_feedback(secret, word)
         groups[p] = groups.get(p, 0) + 1
     score = len(groups) - (sum(v * v for v in groups.values()) / 100000)
-    if word in pool: score += 0.4
+    if cand in pool: score += 0.000001 if is_hard else 0.4
     return score
 
 
