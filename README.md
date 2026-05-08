@@ -71,7 +71,7 @@ There are four modes for the Wordle analysis, which are:
 
 Stats:
 
-SALET: Easy mode
+```SALET: Easy mode
 1. 0
 2. 78
 3. 1223
@@ -121,4 +121,4 @@ DISTRIBUTION
 X                      0
 ==============================
 
-(CLASP Hard mode)
+(CLASP Hard mode)```
