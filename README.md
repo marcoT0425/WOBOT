@@ -105,3 +105,20 @@ X                      0
 Process finished with exit code 0
 
 (Slate NYT)
+
+==============================
+FINAL STATISTICS
+Solve Rate: 100.00% (2973/2973)
+Average Score: 3.6868
+
+DISTRIBUTION
+1  1
+2 █ 114
+3 ██████████████ 1052
+4 ████████████████████ 1475
+5 ████ 310
+6  21
+X                      0
+==============================
+
+(CLASP Hard mode)
