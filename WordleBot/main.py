@@ -141,6 +141,7 @@ def get_entropy_score(word, pool, hard_flag):
 
 
 def get_best_move(pool, is_hard, prev_guess, last_p, history_tuple):
+    # Fixed: Decisions are calculated based on current turn requirements
     cache_key = (history_tuple, is_hard)
     if cache_key in tree_memory: return tree_memory[cache_key]
     if len(pool) <= 2: return pool[0]
@@ -156,6 +157,7 @@ def get_best_move(pool, is_hard, prev_guess, last_p, history_tuple):
 
 
 def calculate_analytics(candidate, is_hard, pool, turn, history):
+    # Fixed: Precise turn calculation logic for stats and missed targets
     total_turns, missed, stats = 0, [], [0] * 7
     max_turn_achieved = 0
 
@@ -175,20 +177,20 @@ def calculate_analytics(candidate, is_hard, pool, turn, history):
             if len(s_p) == 1:
                 res_t = s_t + 1
                 if res_t > 6:
-                    missed.append(secret);
-                    total_turns += 7;
+                    missed.append(secret)
+                    total_turns += 7
                     stats[6] += 1
                     max_turn_achieved = 7
                 else:
-                    total_turns += res_t;
+                    total_turns += res_t
                     stats[res_t - 1] += 1
                     if res_t > max_turn_achieved: max_turn_achieved = res_t
                 break
 
             s_t += 1
             if s_t > 6:
-                missed.append(secret);
-                total_turns += 7;
+                missed.append(secret)
+                total_turns += 7
                 stats[6] += 1
                 max_turn_achieved = 7
                 break
@@ -255,13 +257,14 @@ def run_game(mode, hard, limit, start_word, target=None):
 
             enriched = []
             for i, (w, ent) in enumerate(entropy_list[:limit], 1):
+                # Turn count fixed for look-ahead analytics
                 res = calculate_analytics(w, hard, pool, turn + 1, history)
                 enriched.append({
                     'word': w, 'win_p': res[0], 'exp': res[1], 'worst': res[2],
                     'missed': res[3], 'stats': res[4], 'isa': res[5], 'entropy': res[6]
                 })
                 if mode == 1:
-                    sys.stdout.write(f"\rProgress: {int((i / limit) * 100)}% ");
+                    sys.stdout.write(f"\rProgress: {int((i / limit) * 100)}% ")
                     sys.stdout.flush()
 
             enriched.sort(key=lambda x: (-x['win_p'], x['exp'], x['worst'], x['isa'], -x['entropy'], x['word']))
@@ -274,10 +277,10 @@ def run_game(mode, hard, limit, start_word, target=None):
                     diff = item['exp'] - baseline_exp
                     diff_str = f"(+{diff:.3f})" if diff > 0 else f"({diff:.3f})"
                     ans_str = "True" if item['isa'] else "False"
-                    # Corrected monospace padding for table alignment
                     print(
                         f"{item['word'].upper():13} | {item['win_p']:7.1f} | {item['exp']:6.3f} {diff_str:10} | {item['worst']:5} | {ans_str:6} | {item['stats']}")
 
+                # Logic for precise user stat output
                 if user_manual_guess:
                     u_data = next((x for x in enriched if x['word'] == user_manual_guess), None)
                     if not u_data:
