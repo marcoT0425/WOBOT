@@ -67,3 +67,22 @@ There are four modes for the Wordle analysis, which are:
 | clasp         | ~3.5728 | 8271               | Tree search | Hard | Std (Orig) | 6          |
 | cinqs         | ~3.7733 | 8735               | Tree search | Hard | Std (Orig) | 6          |
 | crate         | ~3.4454 | 7976               | Tree search | Easy | Only Ans   | 6          |
+
+Stats:
+
+SALET: Easy mode
+1. 0
+2. 78
+3. 1223
+4. 975
+5. 39
+6. 0
+
+SALET: Hard mode
+1. 0
+2. 121
+3. 1041
+4. 1014
+5. 131
+6. 8
+
