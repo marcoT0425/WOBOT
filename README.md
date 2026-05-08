@@ -67,6 +67,7 @@ There are four modes for the Wordle analysis, which are:
 | clasp         | ~3.5728 | 8271               | Tree search | Hard | Std (Orig) | 6          |
 | cinqs         | ~3.7733 | 8735               | Tree search | Hard | Std (Orig) | 6          |
 | crate         | ~3.4454 | 7976               | Tree search | Easy | Only Ans   | 6          |
+| slate         | ~3.5355 | ~10511             | Tree search | Easy | WordleBot  | 6          |
 
 Stats:
 
@@ -86,3 +87,21 @@ SALET: Hard mode
 5. 131
 6. 8
 
+==============================
+FINAL STATISTICS
+Solve Rate: 100.00% (2973/2973)
+Average Score: 3.5355
+
+DISTRIBUTION
+1  1
+2 █ 73
+3 ███████████████████ 1359
+4 ████████████████████ 1417
+5 █ 119
+6  4
+X                      0
+==============================
+
+Process finished with exit code 0
+
+(Slate NYT)
