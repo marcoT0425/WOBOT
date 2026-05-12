@@ -69,6 +69,7 @@ There are four modes for the Wordle analysis, which are:
 | crate         | ~3.4454 | 7976               | Tree search | Easy | Only Ans   | 6          |
 | slate         | ~3.5355 | ~10511             | Tree search | Easy | WordleBot  | 6          |
 
+The accuracy comparing with the optimal score is well over 99.99%. But there are very few tweaks I tested RAILE it has 8006 but the optimal is 8005. I mean this is forgivable.
 Stats:
 
 ```SALET: Easy mode
