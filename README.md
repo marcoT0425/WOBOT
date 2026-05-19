@@ -71,6 +71,23 @@ There are four modes for the Wordle analysis, which are:
 
 The accuracy comparing with the optimal score is well over 99.99%. But there are very few tweaks I tested RAILE it has 8006 but the optimal is 8005. I mean this is forgivable. Also trying to do a stress test for the hard mode with a restricted word list, it is possible, and has a 100% solve rate with PLANE. 
 
+## Is it possible to solve every Wordle puzzle WITHIN 6 guesses in hard mode with ONLY the 2315 words as guesses flexibly* (I mean grey letters can be reused, yellow letters' positions can be unchanged)
+
+| Starting word | Possible for manoeuvring all traps? |
+| ------------- | ----------------------------------- |
+| trade         | Yes                                 |
+| place         | Yes                                 |
+| plate         | Yes                                 |
+| plane         | Yes                                 |
+| clasp         | Yes                                 |
+| spilt         | Yes                                 |
+| shalt         | Yes                                 |
+| scald         | Yes                                 |
+| slate         | No                                  |
+| trace         | No                                  |
+| crate         | No                                  |
+| stare         | No                                  |
+
 Stats:
 
 ```SALET: Easy mode
@@ -123,4 +140,4 @@ DISTRIBUTION
 X                      0
 ==============================
 
-(CLASP Hard mode)```
+(CLASP Hard mode)
