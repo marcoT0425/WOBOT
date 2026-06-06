@@ -1,5 +1,5 @@
 # WOBOT
-WOBOT is one of the most optimal Wordle solvers in the world. It can solve all 2315 puzzles with a limit of 5 guesses for all the puzzles in easy mode with an average of 3.421 guesses. The suggested starting word is SALET.
+WOBOT is one of the most optimal Wordle solvers in the world. It can solve all 2315 puzzles with a limit of 5 guesses for all the puzzles in easy mode with an average of 3.421 guesses. The suggested starting word is SALET. 
 
 If you want to run this code, make sure you have already followed these rules shown here:
 
@@ -69,7 +69,7 @@ There are four modes for the Wordle analysis, which are:
 | crate         | ~3.4454 | 7976               | Tree search | Easy | Only Ans   | 6          |
 | slate         | ~3.5355 | ~10511             | Tree search | Easy | WordleBot  | 6          |
 
-The accuracy comparing with the optimal score is well over 99.99%. But there are very few tweaks I tested RAILE it has 8006 but the optimal is 8005. I mean this is forgivable. Also trying to do a stress test for the hard mode with a restricted word list, it is possible, and has a 100% solve rate with PLANE. 
+The accuracy comparing with the optimal score is well over 99.99%. But there are very few tweaks I tested RAILE it has 8006 but the optimal is 8005. I mean this is forgivable. Also trying to do a stress test for the hard mode with a restricted word list, it is possible, and has a 100% solve rate with PLANE. For the worst starting words like ZOPPO getting all grey, it takes 2 hours to load and calculate the next guess.
 
 ## Is it possible to solve every Wordle puzzle WITHIN 6 guesses in hard mode with ONLY the 2315 words as guesses flexibly* (I mean grey letters can be reused, yellow letters' positions can be unchanged)
 
