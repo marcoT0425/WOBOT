@@ -2,6 +2,7 @@ import sys
 import os
 import random
 import math
+import time
 from functools import lru_cache
 
 # --- CONFIGURATION ENGINE ---
@@ -116,11 +117,42 @@ def get_emoji_pattern(pattern):
 # --- 3. PDF & TEXT TREE LOGIC ---
 def print_distribution(dist):
     print("\nDISTRIBUTION")
+    # Exact Hex mappings derived from screenshot colors
+    hex_colors = [
+        "74;162;230",  # 1: Soft Blue
+        "139;211;235",  # 2: Sky Blue
+        "134;227;139",  # 3: Mint Green
+        "182;240;130",  # 4: Chartreuse
+        "240;229;140",  # 5: Straw Yellow
+        "230;145;120",  # 6: Muted Terracotta Coral
+        "242;162;177"  # X: Rose Pink
+    ]
+    reset = "\033[0m"
     max_count = max(dist) if max(dist) > 0 else 1
-    for i in range(6):
-        bar = "█" * int((dist[i] / max_count) * 20)
-        print(f"{i + 1} {bar} {dist[i]}")
-    print(f"X  {dist[6]}")
+    max_bar_width = 30
+
+    for i in range(7):
+        label = str(i + 1) if i < 6 else "X"
+        count = dist[i]
+
+        # Sub-character block interpolation configuration to display tiny counts cleanly
+        raw_width = (count / max_count) * max_bar_width
+        whole_blocks = int(raw_width)
+        remainder = raw_width - whole_blocks
+
+        fractional_char = ""
+        if count > 0 and whole_blocks == 0:
+            fractional_char = "▏"
+        elif remainder > 0:
+            fractions = ["", "▏", "▎", "▍", "▌", "▋", "▊", "▉"]
+            frac_idx = int(remainder * 8)
+            fractional_char = fractions[frac_idx]
+
+        bar_str = "█" * whole_blocks + fractional_char
+        rgb = hex_colors[i]
+        color_ansi = f"\033[38;2;{rgb}m"
+
+        print(f"{label} {color_ansi}{bar_str:<31}{reset}{count}")
 
 
 def export_tree_txt(start_word, results_dict):
@@ -300,7 +332,6 @@ def calculate_analytics(candidate, is_hard, pool, turn, history, limit_depth=5):
 def evaluate_and_rank_moves(pool, hard, final_word, p, turn, history, limit, show_progress=False):
     pool_tuple = tuple(pool)
 
-    # Zero-delay shortcut rule: If exactly 2 answers or fewer are left, branch analysis is trivial
     if len(pool_tuple) <= 2:
         return [{
             'word': pool_tuple[0], 'win_p': 100.0, 'exp': 1.0, 'worst': 1,
@@ -308,7 +339,6 @@ def evaluate_and_rank_moves(pool, hard, final_word, p, turn, history, limit, sho
             'largest': 0
         }]
 
-    # Global Branch Prediction Memory check to prevent cumulative redundancy
     cache_matrix_key = (pool_tuple, hard, limit)
     if cache_matrix_key in BRANCH_PREDICTION_MATRIX:
         return BRANCH_PREDICTION_MATRIX[cache_matrix_key]
@@ -341,8 +371,7 @@ def evaluate_and_rank_moves(pool, hard, final_word, p, turn, history, limit, sho
                 'six_games': 99999, 'five_p': 99999, 'largest': 99999
             })
 
-    # Hierarchical Sorting Array Chain matching your exact requirement order:
-    # (-win_p, exp, worst, six_games, five_p, largest, word)
+    # Perfect alphabetical tiebreaking constraint verification hierarchy
     enriched.sort(
         key=lambda x: (-x['win_p'], x['exp'], x['worst'], x['six_games'], x['five_p'], x['largest'], x['word']))
 
@@ -358,7 +387,6 @@ def get_best_move(pool, is_hard, prev_guess, last_p, history_tuple, limit_depth=
     if len(pool) <= 2:
         return pool[0]
 
-    # --- LOOKAHEAD DEPTH BASE BASE INTERRUPT ---
     if limit_depth <= 1:
         pool_tuple = tuple(pool)
         active_pool = full_dictionary if not is_hard else [c for c in full_dictionary if
@@ -443,7 +471,6 @@ def run_game(mode, hard, limit, start_word, target=None, fixed_sequence=None):
             if fixed_sequence and turn < len(fixed_sequence):
                 current_guess = fixed_sequence[turn]
             else:
-                # Core Board Unified Coexistence State Check to shortcut identical sub-trees
                 state_key = (tuple(pool), hard, limit, final_word, p, turn)
                 if mode == 7 and state_key in UNIFIED_COEXISTENCE_CACHE:
                     current_guess = UNIFIED_COEXISTENCE_CACHE[state_key]
@@ -515,13 +542,18 @@ def main():
             f"\nExecuting Exhaustive Matrix Mode... (Evaluating {total_wordlist_len} Starters × {len(proper_word)} Answers)")
         exhaustive_results = []
 
+        # Start global execution stopwatch tracking total running time profile
+        global_start_time = time.perf_counter()
+
         for s_idx, starter in enumerate(word_list):
             total_turns = 0
             stats = [0] * (MAX_TURNS + 1)
             missed_count = 0
             worst_turn = 0
 
-            # Temporary calculation tracker for starter word configuration buckets
+            # Record puzzle start time profile split
+            puzzle_start_time = time.perf_counter()
+
             buckets = {}
             for target in proper_word:
                 p = get_feedback(target, starter)
@@ -530,7 +562,6 @@ def main():
                 buckets[p].append(target)
             starter_largest_group = max(len(sub) for sub in buckets.values()) if buckets else 0
 
-            # Show interactive, rolling display update of the active word processing before game loops run
             completion_pct = (s_idx / total_wordlist_len) * 100
             sys.stdout.write(
                 f"\r\033[K[Progress: {completion_pct:.2f}%] Processing Starter: {starter} ({s_idx + 1}/{total_wordlist_len})")
@@ -550,6 +581,9 @@ def main():
                     stats[turns - 1] += 1
                     if turns > worst_turn:
                         worst_turn = turns
+
+            puzzle_end_time = time.perf_counter()
+            puzzle_duration_ms = (puzzle_end_time - puzzle_start_time) * 1000
 
             win_p = ((len(proper_word) - missed_count) / len(proper_word)) * 100
             avg_turns = total_turns / len(proper_word)
@@ -575,24 +609,30 @@ def main():
                 'five_p': five_p_and_above,
                 'largest': starter_largest_group,
                 'isa': isa_flag,
-                'stats_str': str(sorted_stats_dict)
+                'stats_str': str(sorted_stats_dict),
+                'total_guesses': total_turns
             }
             exhaustive_results.append(entry)
 
-            # Print historical layout log exactly like Screenshot once an items calculation finishes
-            sys.stdout.write(f"\r\033[K{s_idx + 1} {starter} ({s_idx + 1}, {avg_turns:.14f}, {sorted_stats_dict})\n")
+            # Outputs real log formatting displaying cumulative guess totals along with milliseconds elapsed per starter
+            sys.stdout.write(
+                f"\r\033[K{s_idx + 1} {starter} {total_turns} ({s_idx + 1}, {avg_turns:.14f}, {sorted_stats_dict}) [{puzzle_duration_ms:.2f} ms]\n")
             sys.stdout.flush()
 
-        # Sorts perfectly prioritizing: (-win_p, exp, worst, six_games, five_p, largest, word)
         exhaustive_results.sort(
             key=lambda x: (-x['win_p'], x['exp'], x['worst'], x['six_games'], x['five_p'], x['largest'], x['word']))
+
+        global_end_time = time.perf_counter()
+        global_duration_secs = global_end_time - global_start_time
 
         output_filename = "exhaustive_stats.txt"
         with open(output_filename, "w", encoding="utf-8") as f:
             for item in exhaustive_results:
-                f.write(f"{item['word'].upper()} ({item['word']}, {item['exp']:.14f}, {item['stats_str']})\n")
+                f.write(
+                    f"{item['word'].upper()} ({item['word']}, {item['exp']:.14f}, {item['stats_str']}) Total Guesses: {item['total_guesses']}\n")
 
         print(f"\nExhaustive Run Complete! Master stats successfully exported to '{output_filename}'.")
+        print(f"Total Processing Time Taken: {global_duration_secs:.4f} seconds.")
     else:
         targets = []
         if mode == 2:
@@ -603,20 +643,30 @@ def main():
             targets = proper_word
 
         total_turns, pdf_data, dist = 0, {}, [0] * 7
+
+        # Execution timing trackers for separate modes
+        batch_start_time = time.perf_counter()
+
         for i, t in enumerate(targets):
+            single_start = time.perf_counter()
             turns, path_col, path_plain, hist, final_pool = run_game(mode, hard, limit, start_w, target=t,
                                                                      fixed_sequence=fixed_sequence)
+            single_duration = (time.perf_counter() - single_start) * 1000
 
             idx = min(turns - 1, 6)
             dist[idx] += 1
             total_turns += turns
             pdf_data[t] = hist
-            print(f"\n{t.upper()} ({i + 1}/{len(targets)})")
+            print(f"\n{t.upper()} ({i + 1}/{len(targets)}) [{single_duration:.2f} ms]")
             for row in path_col: print(row)
+
+        batch_duration = time.perf_counter() - batch_start_time
 
         if mode in [2, 4, 6]:
             print(f"\nFINAL STATISTICS")
+            print(f"Total Guesses Taken for {start_w.lower()}: {total_turns}")
             print(f"Avg Steps: {total_turns / len(targets):.4f}")
+            print(f"Total Processing Time Taken: {batch_duration:.4f} seconds.")
             print_distribution(dist)
             generate_tree_pdf(start_w, pdf_data)
             export_tree_txt(start_w, pdf_data)
